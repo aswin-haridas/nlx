@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import axios from 'axios'
 
 function createWindow() {
   // Create the browser window.
@@ -51,6 +52,55 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
+
+  ipcMain.handle('summarize', async (event, text) => {
+    console.log('Received text to summarize:', text.substring(0, 100) + '...')
+
+    try {
+      const response = await axios.post(
+        'http://127.0.0.1:8000/summarize',
+        {
+          text: text
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      console.log(response)
+
+      return response.data
+    } catch (error) {
+      console.error('Error summarizing text:', error.message)
+      if (error.response) {
+        console.error('Response data:', error.response.data)
+        console.error('Response status:', error.response.status)
+      }
+      return null
+    }
+  })
+
+  ipcMain.handle('book', async (event, action="book") => {
+    try {
+      const response = await axios.post(
+        'http://127.0.0.1:8000/book',
+        {
+          action: action
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      )
+      console.log('Booking response:', response.data)
+      return response.data
+    } catch (error) {
+      console.error('Error booking:', error.message)
+      return { data: 'error' }
+    }
+  })
 
   createWindow()
 
