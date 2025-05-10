@@ -10,6 +10,30 @@ const api = {
   book : () => {
     return ipcRenderer.invoke('book')
   },
+  websocket: {
+    send: (message) => {
+      console.log('Preload: Sending WebSocket message:', message)
+      return ipcRenderer.invoke('ws-send', message)
+    },
+    // Allow renderer to listen for WebSocket events
+    onMessage: (callback) => {
+      ipcRenderer.on('ws-message', (_event, message) => callback(message))
+    },
+    onConnect: (callback) => {
+      ipcRenderer.on('ws-connect', () => callback())
+    },
+    onDisconnect: (callback) => {
+      ipcRenderer.on('ws-disconnect', () => callback())
+    },
+    // Remove event listeners when they're no longer needed
+    removeListeners: () => {
+      ipcRenderer.removeAllListeners('ws-message')
+      ipcRenderer.removeAllListeners('ws-connect')
+      ipcRenderer.removeAllListeners('ws-disconnect')
+    }
+  }
+
+
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -3,7 +3,8 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import axios from 'axios'
-
+import WebSocket from 'ws'
+let ws = null
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -36,6 +37,30 @@ function createWindow() {
   }
 }
 
+function connectWebSocket() {
+  ws = new WebSocket(`ws://${YOUR_WS_SERVER_IP}:${YOUR_WS_PORT}/`);
+
+  ws.on('open', () => {
+    console.log('WebSocket connected');
+  });
+
+  ws.on('message', (message) => {
+    const str = message.toString();
+    console.log('Message received:', str);
+    mainWindow.webContents.send('some-event', str);
+  });
+
+  ws.on('error', (err) => {
+    console.error('WebSocket error:', err);
+  });
+
+  ws.on('close', () => {
+    console.log('WebSocket closed. Reconnecting...');
+    setTimeout(connectWebSocket, 5000);
+  });
+}
+
+
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
@@ -50,8 +75,6 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window)
   })
 
-  // IPC test
-  ipcMain.on('ping', () => console.log('pong'))
 
   ipcMain.handle('summarize', async (event, text) => {
     console.log('Received text to summarize:', text.substring(0, 100) + '...')
@@ -102,7 +125,15 @@ app.whenReady().then(() => {
     }
   })
 
+
   createWindow()
+
+  connectWebSocket();
+
+  ipcMain.handle('some-event', async (event, msg) => {
+    ws.send(msg);
+    return true;
+  });
 
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
