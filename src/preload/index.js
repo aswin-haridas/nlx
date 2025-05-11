@@ -7,7 +7,7 @@ const api = {
     console.log('Preload: Invoking summarize with text length:', text.length)
     return ipcRenderer.invoke('summarize', text)
   },
-  book : () => {
+  book: () => {
     return ipcRenderer.invoke('book')
   },
   websocket: {
@@ -32,8 +32,6 @@ const api = {
       ipcRenderer.removeAllListeners('ws-disconnect')
     }
   }
-
-
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -23,7 +23,9 @@
     "@tiptap/react": "^2.11.9",
     "@tiptap/starter-kit": "^2.11.9",
     "axios": "^1.9.0",
+    "framer-motion": "^12.10.5",
     "lucide-react": "^0.507.0",
+    "react-router-dom": "^7.6.0",
     "zustand": "^5.0.4"
   },
   "devDependencies": {
@@ -31,6 +33,7 @@
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.21",
+    "daisyui": "^5.0.35",
     "electron": "^35.1.5",
     "electron-builder": "^25.1.8",
     "electron-vite": "^3.1.0",

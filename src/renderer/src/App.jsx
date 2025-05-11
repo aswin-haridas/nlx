@@ -1,16 +1,20 @@
-import EditorComponent from './components/Editor'
-import SideBar from './components/SideBar'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import EditorPage from './pages/EditorPage/EditorPage'
+import Brain from './pages/BrainPage/Brain'
+import BootPage from './pages/BootPage/Boot'
+import PageTransition from './components/PageTransition'
 
 function App() {
   return (
-    <>
-      <div className="flex w-[100%] h-screen">
-        <div className="flex-1 w-full m-2 pr-10">
-          <EditorComponent />
-        </div>
-        <SideBar />
-      </div>
-    </>
+    <Router>
+      <PageTransition>
+        <Routes>
+          <Route path="/" element={<BootPage />} />
+          <Route path="/editor" element={<EditorPage />} />
+          <Route path="/brain" element={<Brain />} />
+        </Routes>
+      </PageTransition>
+    </Router>
   )
 }
 

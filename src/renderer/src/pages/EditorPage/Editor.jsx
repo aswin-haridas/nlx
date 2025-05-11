@@ -2,8 +2,8 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { useEffect } from 'react'
 
-import useMemory from '../core/store'
-import useLocalStorage from '../hooks/useLocalStorage'
+import useMemory from '../../core/store'
+import useLocalStorage from '../../hooks/useLocalStorage'
 
 const EditorComponent = () => {
   const story = useMemory((state) => state.story)
@@ -22,8 +22,9 @@ const EditorComponent = () => {
     extensions,
     content: story || storedStory,
     editorProps: {
-      attributes: { class: 'prose prose-sm m-0 focus:outline-none dark:prose-invert ' }
+      attributes: { class: 'prose prose-sm m-0 focus:outline-none dark:prose-invert' }
     },
+    autofocus: true,
     onUpdate: ({ editor }) => {
       const html = editor.getHTML()
       setStory(html)
@@ -31,7 +32,6 @@ const EditorComponent = () => {
       console.log(story)
     }
   })
-
   return <EditorContent editor={editor} />
 }
 
