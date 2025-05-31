@@ -5,6 +5,25 @@ import { useEffect } from 'react'
 import useMemory from '../../core/store'
 import useLocalStorage from '../../hooks/useLocalStorage'
 
+const ws = new WebSocket('ws://localhost:8080') // Replace with your WebSocket server address
+
+ws.onopen = () => {
+  console.log('WebSocket connection opened')
+  ws.send('Hello from Electron!')
+}
+
+ws.onmessage = (event) => {
+  console.log('Received message:', event.data)
+}
+
+ws.onclose = () => {
+  console.log('WebSocket connection closed')
+}
+
+ws.onerror = (error) => {
+  console.error('WebSocket error:', error)
+}
+
 const EditorComponent = () => {
   const story = useMemory((state) => state.story)
   const setStory = useMemory((state) => state.setStory)

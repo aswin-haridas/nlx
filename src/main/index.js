@@ -36,28 +36,6 @@ function createWindow() {
   }
 }
 
-function connectWebSocket() {
-  ws = new WebSocket(`ws://${YOUR_WS_SERVER_IP}:${YOUR_WS_PORT}/`)
-
-  ws.on('open', () => {
-    console.log('WebSocket connected')
-  })
-
-  ws.on('message', (message) => {
-    const str = message.toString()
-    console.log('Message received:', str)
-    mainWindow.webContents.send('some-event', str)
-  })
-
-  ws.on('error', (err) => {
-    console.error('WebSocket error:', err)
-  })
-
-  ws.on('close', () => {
-    console.log('WebSocket closed. Reconnecting...')
-    setTimeout(connectWebSocket, 5000)
-  })
-}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
