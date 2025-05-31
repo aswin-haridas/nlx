@@ -14,7 +14,7 @@ const SearchInput = ({ searchQuery, setSearchQuery }) => {
       transition={{ duration: 0.3 }}
     >
       <div className="relative flex items-center">
-        <Search className="absolute left-4 text-[#AAAAAA]" size={16} />
+        <Search className="absolute left-4 text-[#aaaaaa]" size={16} />
         <input
           type="text"
           placeholder="Search notes..."
