@@ -32,3 +32,15 @@ $ npm run build:mac
 # For Linux
 $ npm run build:linux
 ```
+
+nlx/
+├── src/
+│   ├── main/          # Electron main process
+│   ├── preload/       # Electron preload scripts
+│   └── renderer/      # React frontend
+│       └── src/
+│           ├── pages/     # Application pages
+│           ├── components/ # Reusable components
+│           ├── core/       # State management
+│           ├── hooks/      # Custom React hooks
+│           └── services/   # API services
