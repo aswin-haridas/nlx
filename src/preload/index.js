@@ -4,8 +4,13 @@ import { contextBridge, ipcRenderer } from "electron";
 // Custom APIs for renderer
 const api = {
   summarize: (text) => {
-    console.log(text)
-    return ipcRenderer.invoke("summarize-text", text); // Use ipcRenderer.invoke and return the promise
+    console.log("Preload: Summarize function called with text:", text);
+    try {
+      return ipcRenderer.invoke("summarize-text", text);
+    } catch (error) {
+      console.error("Preload: Error in summarize function:", error);
+      throw error;
+    }
   },
 };
 
@@ -16,10 +21,12 @@ if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld("electron", electronAPI);
     contextBridge.exposeInMainWorld("api", api);
+    console.log("Preload: APIs exposed successfully");
   } catch (error) {
-    console.error(error);
+    console.error("Preload: Error exposing APIs:", error);
   }
 } else {
   window.electron = electronAPI;
   window.api = api;
+  console.log("Preload: APIs added to window global");
 }
